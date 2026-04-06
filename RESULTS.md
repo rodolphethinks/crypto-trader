@@ -146,46 +146,93 @@ Research docs heavily recommended funding-rate arbitrage (cited in ALL 4 docs) a
 
 ---
 
-## Production System
+## Production System — 2-Layer Architecture
+
+### Design Philosophy
+"Trust validated strategies. Intervene only when risk becomes extreme."
+
+Two layers only:
+1. **Strategy Execution (PRIMARY)** — 7 long-only validated configs with tier-based capital allocation
+2. **Catastrophic Risk Filter (OVERRIDE ONLY)** — slow BTC kill switch, ALL 4 conditions × 3 candle persistence
+
+No regime filters, no RS ranking — data proved they hurt returns (14/15 configs degraded).
+
+### Deployed Strategies & Capital Allocation
+
+| Tier | Strategy | Pair | Allocation | WF Avg/wk | Folds | Risk/Trade |
+|------|----------|------|-----------|-----------|-------|-----------|
+| T1 (Core) | AdaptiveChannel | NEARUSDC | **25%** | +1.15%/wk | 5/5 | 5% |
+| T1 (Core) | AdaptiveChannel | SOLUSDC | **15%** | +0.70%/wk | 5/5 | 5% |
+| T2 (Active) | VolBreakoutMom | XRPUSDC | **12%** | +1.17%/wk | 4/5 | 5% |
+| T2 (Active) | VolatilityCapture | AVAXUSDC | **10%** | +0.84%/wk | 4/5 | 5% |
+| T2 (Active) | TSMOM | ADAUSDC | **8%** | +0.94%/wk | 4/5 | 5% |
+| T3 (Reduced) | VolBreakoutMom | DOGEUSDC | **5%** | +1.05%/wk | 3/5 | 5% |
+| T3 (Reduced) | RegimeMomentumV2 | XRPUSDC | **5%** | +0.99%/wk | 3/5 | 5% |
+| — | USDC Reserve | — | **20%** | — | — | — |
+
+**Total deployed: 80% | USDC reserve: 20%**
+
+### Risk Controls
+- **Per trade**: 5% of allocated capital risked, always with stop-loss
+- **Global drawdown**: ≥15% → stop new trades, reduce to ~30% exposure; recover at <10%
+- **Consecutive losses**: 5 → strategy auto-disabled
+- **Post stop-loss cooldown**: 2 candles before re-entry
+- **Extreme candle filter**: skip entry if candle body > 2× ATR
+- **Correlation cap**: 60% max to correlated asset groups (e.g. L1 alts: NEAR+SOL+AVAX)
+- **Dynamic allocation**: +5% if WR > 55% over 10+ trades; -10% after 3 consecutive losses
+
+### Catastrophic Risk Filter (Kill Switch)
+Activates ONLY when ALL 4 conditions persist for ≥3 consecutive candles:
+1. BTC below 200-period SMA
+2. BTC making 3+ consecutive lower lows
+3. BTC volatility contracting (ATR declining)
+4. Breakout failure rate > 70% over last 20 bars
+
+When active: Only T1 strategies at 50% allocation. All others suspended.
+When inactive: No restriction — strategies trade freely.
+
+### Expected Performance (Weighted by Allocation)
+- **Backtest-weighted avg**: ~0.96%/wk (~$96/wk on $10k)
+- **Live assumption (50-70% of backtest)**: ~0.48-0.67%/wk (~$48-67/wk)
+- **Annual projection (50% decay)**: ~$2,500-3,500 on $10k (25-35%)
+- **Max expected drawdown**: ~15-20% (backtest max was 13.9% for NEAR)
 
 ### Files
-- `trading/live_trader.py` — Production paper/live trader with all 10 configs
-- `scripts/run_production.py` — Launcher (`--check-signals`, `--mode paper/live`)
+- **`trading/production_trader.py`** — 2-layer production trader (750 lines)
+- `trading/live_trader.py` — Legacy trader with original 10 long/short configs
 - `strategies/v6_aggressive.py` — 7 V6 strategies
-- `strategies/v7_diverse.py` — 6 V7 strategies (OrderFlowMom, TrendPulse, VolCapture, MeanRevRSI, AdaptChan, MomSwitch)
-- `strategies/v7_ml.py` — 3 DL strategies (LSTM, CNN, Transformer)
-- `strategies/v8_research.py` — 5 research-extracted strategies (VolBreakoutMom, MeanRevLowVol, WeekendGapFade, BTCResidualMR, TSMOM)
+- `strategies/v7_diverse.py` — 6 V7 strategies (AdaptChan, VolCapture, etc.)
+- `strategies/v8_research.py` — 5 research-extracted strategies (VolBreakoutMom, TSMOM, etc.)
 - `scripts/run_v8_pipeline.py` — Automated research-to-backtest pipeline
 - `scripts/run_longonly_retest.py` — Long-only re-test + fine sweep pipeline
-- `results/` — V8 per-strategy JSONs, trade CSVs, sweep & walk-forward CSVs
-- `results/v6v7_longonly_retest.csv` — V6/V7 long-only re-test results
-- `results/tsmom_fine_sweep.csv` — Fine TSMOM parameter sweep (375 combos)
-- `results/vbm_fine_sweep.csv` — Fine VolBreakoutMom sweep (540 combos)
-- `results/all_longonly_validated.csv` — Combined long-only ranking
+- `scripts/run_regime_filtered.py` — 3-layer regime test (proved harmful)
 
 ### How to Run
 ```bash
-# Check current signals (one-shot)
-python scripts/run_production.py --check-signals
+# One-shot signal check (recommended first step)
+python trading/production_trader.py --check
 
-# Start paper trading
-python scripts/run_production.py --mode paper --capital 10000
+# Paper trading (validate live before risking capital)
+python trading/production_trader.py --mode paper --capital 10000
 
-# Start live trading (use with caution)
-python scripts/run_production.py --mode live --capital 10000
+# Check status of running system
+python trading/production_trader.py --status
+
+# Live trading (requires 'CONFIRM' input)
+python trading/production_trader.py --mode live --capital 10000
 ```
 
 ---
 
-## Pair Exposure
-| Pair | # Configs | Strategies |
-|------|-----------|------------|
-| AVAXUSDC | 3 | MomAccel, CrossPair, VolCapture |
-| XRPUSDC | 2 | MultiEdge, RegimeMomV2 |
-| NEARUSDC | 2 | AdaptChan, VolCapture |
-| DOGEUSDC | 1 | MultiEdge |
-| BTCUSDC | 1 | CrossPair |
-| SOLUSDC | 1 | AdaptChan |
+## Pair Exposure (Production System)
+| Pair | # Configs | Strategies | Total Allocation |
+|------|-----------|------------|-----------------|
+| NEARUSDC | 1 | AdaptChan | 25% |
+| SOLUSDC | 1 | AdaptChan | 15% |
+| XRPUSDC | 2 | VBM, RegimeMomV2 | 17% |
+| AVAXUSDC | 1 | VolCapture | 10% |
+| ADAUSDC | 1 | TSMOM | 8% |
+| DOGEUSDC | 1 | VBM | 5% |
 
 ---
 
