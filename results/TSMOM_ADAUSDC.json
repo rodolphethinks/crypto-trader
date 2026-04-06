@@ -1,0 +1,74 @@
+{
+  "strategy": "TSMOM",
+  "symbol": "ADAUSDC",
+  "interval": "4h",
+  "params": {
+    "lookback": 12,
+    "z_threshold": 1.0,
+    "vol_min_ann": 0.3
+  },
+  "in_sample": {
+    "strategy": "TSMOM",
+    "symbol": "ADAUSDC",
+    "param_idx": 3,
+    "params": "{'lookback': 12, 'z_threshold': 1.0, 'vol_min_ann': 0.3}",
+    "final_capital": 17166.23,
+    "total_return_pct": 71.6623,
+    "weekly_return_pct": 0.6121,
+    "n_trades": 163,
+    "win_rate_pct": 42.33,
+    "profit_factor": 1.1474,
+    "max_drawdown_pct": 36.11,
+    "sharpe_annual": 0.7172,
+    "n_weeks": 117.1
+  },
+  "walk_forward": {
+    "n_folds": 5,
+    "positive_folds": 4,
+    "all_positive": false,
+    "avg_weekly_pct": 0.6482,
+    "avg_max_dd_pct": 19.79,
+    "folds": [
+      {
+        "fold": 1,
+        "return_pct": 6.3255,
+        "weekly_pct": 0.2703,
+        "n_trades": 32,
+        "win_rate": 37.5,
+        "max_dd": 10.27
+      },
+      {
+        "fold": 2,
+        "return_pct": 53.1769,
+        "weekly_pct": 2.2721,
+        "n_trades": 36,
+        "win_rate": 50.0,
+        "max_dd": 15.62
+      },
+      {
+        "fold": 3,
+        "return_pct": 12.0262,
+        "weekly_pct": 0.5138,
+        "n_trades": 24,
+        "win_rate": 45.83,
+        "max_dd": 17.25
+      },
+      {
+        "fold": 4,
+        "return_pct": 36.5412,
+        "weekly_pct": 1.5613,
+        "n_trades": 37,
+        "win_rate": 48.65,
+        "max_dd": 19.7
+      },
+      {
+        "fold": 5,
+        "return_pct": -32.2135,
+        "weekly_pct": -1.3764,
+        "n_trades": 23,
+        "win_rate": 26.09,
+        "max_dd": 36.11
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "strategy": "TSMOM",
+  "symbol": "NEARUSDC",
+  "interval": "4h",
+  "params": {
+    "lookback": 8,
+    "z_threshold": 0.75,
+    "vol_min_ann": 0.3
+  },
+  "in_sample": {
+    "strategy": "TSMOM",
+    "symbol": "NEARUSDC",
+    "param_idx": 1,
+    "params": "{'lookback': 8, 'z_threshold': 0.75, 'vol_min_ann': 0.3}",
+    "final_capital": 18017.33,
+    "total_return_pct": 80.1733,
+    "weekly_return_pct": 0.6848,
+    "n_trades": 181,
+    "win_rate_pct": 41.44,
+    "profit_factor": 1.1074,
+    "max_drawdown_pct": 36.8,
+    "sharpe_annual": 0.8148,
+    "n_weeks": 117.1
+  },
+  "walk_forward": {
+    "n_folds": 5,
+    "positive_folds": 3,
+    "all_positive": false,
+    "avg_weekly_pct": 0.1852,
+    "avg_max_dd_pct": 30.35,
+    "folds": [
+      {
+        "fold": 1,
+        "return_pct": 26.8238,
+        "weekly_pct": 1.1461,
+        "n_trades": 32,
+        "win_rate": 40.62,
+        "max_dd": 24.12
+      },
+      {
+        "fold": 2,
+        "return_pct": 26.0921,
+        "weekly_pct": 1.1148,
+        "n_trades": 50,
+        "win_rate": 42.0,
+        "max_dd": 35.58
+      },
+      {
+        "fold": 3,
+        "return_pct": 14.4758,
+        "weekly_pct": 0.6185,
+        "n_trades": 32,
+        "win_rate": 43.75,
+        "max_dd": 22.91
+      },
+      {
+        "fold": 4,
+        "return_pct": -22.5398,
+        "weekly_pct": -0.963,
+        "n_trades": 43,
+        "win_rate": 37.21,
+        "max_dd": 29.13
+      },
+      {
+        "fold": 5,
+        "return_pct": -23.1791,
+        "weekly_pct": -0.9904,
+        "n_trades": 23,
+        "win_rate": 26.09,
+        "max_dd": 40.02
+      }
+    ]
+  }
+}

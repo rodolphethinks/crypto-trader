@@ -1,0 +1,6 @@
+strategy,symbol,params,positive_folds,all_positive,avg_weekly_pct,avg_max_dd_pct
+TSMOM,SOLUSDC,"{'lookback': 12, 'z_threshold': 1.0, 'vol_min_ann': 0.3}",4,False,0.7959,21.05
+TSMOM,ADAUSDC,"{'lookback': 12, 'z_threshold': 1.0, 'vol_min_ann': 0.3}",4,False,0.6482,19.79
+VolBreakoutMom,DOGEUSDC,"{'lookback': 10, 'k_threshold': 1.5, 'tp_atr_mult': 2.5, 'sl_atr_mult': 1.0}",3,False,0.5161,18.65
+VolBreakoutMom,XRPUSDC,"{'lookback': 15, 'k_threshold': 1.5, 'tp_atr_mult': 3.0, 'sl_atr_mult': 1.0}",3,False,0.4793,15.99
+TSMOM,NEARUSDC,"{'lookback': 8, 'z_threshold': 0.75, 'vol_min_ann': 0.3}",3,False,0.1852,30.35

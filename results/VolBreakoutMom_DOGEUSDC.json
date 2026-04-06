@@ -1,0 +1,75 @@
+{
+  "strategy": "VolBreakoutMom",
+  "symbol": "DOGEUSDC",
+  "interval": "4h",
+  "params": {
+    "lookback": 10,
+    "k_threshold": 1.5,
+    "tp_atr_mult": 2.5,
+    "sl_atr_mult": 1.0
+  },
+  "in_sample": {
+    "strategy": "VolBreakoutMom",
+    "symbol": "DOGEUSDC",
+    "param_idx": 1,
+    "params": "{'lookback': 10, 'k_threshold': 1.5, 'tp_atr_mult': 2.5, 'sl_atr_mult': 1.0}",
+    "final_capital": 18191.94,
+    "total_return_pct": 81.9194,
+    "weekly_return_pct": 0.6997,
+    "n_trades": 129,
+    "win_rate_pct": 37.21,
+    "profit_factor": 1.2065,
+    "max_drawdown_pct": 25.44,
+    "sharpe_annual": 0.8904,
+    "n_weeks": 117.1
+  },
+  "walk_forward": {
+    "n_folds": 5,
+    "positive_folds": 3,
+    "all_positive": false,
+    "avg_weekly_pct": 0.5161,
+    "avg_max_dd_pct": 18.65,
+    "folds": [
+      {
+        "fold": 1,
+        "return_pct": 29.2196,
+        "weekly_pct": 1.2484,
+        "n_trades": 22,
+        "win_rate": 45.45,
+        "max_dd": 25.35
+      },
+      {
+        "fold": 2,
+        "return_pct": 56.4883,
+        "weekly_pct": 2.4135,
+        "n_trades": 33,
+        "win_rate": 45.45,
+        "max_dd": 11.44
+      },
+      {
+        "fold": 3,
+        "return_pct": -17.5175,
+        "weekly_pct": -0.7485,
+        "n_trades": 15,
+        "win_rate": 20.0,
+        "max_dd": 25.4
+      },
+      {
+        "fold": 4,
+        "return_pct": 4.197,
+        "weekly_pct": 0.1793,
+        "n_trades": 22,
+        "win_rate": 36.36,
+        "max_dd": 10.89
+      },
+      {
+        "fold": 5,
+        "return_pct": -11.9911,
+        "weekly_pct": -0.5123,
+        "n_trades": 20,
+        "win_rate": 25.0,
+        "max_dd": 20.15
+      }
+    ]
+  }
+}
