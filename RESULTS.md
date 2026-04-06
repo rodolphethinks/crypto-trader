@@ -206,3 +206,48 @@ python scripts/run_production.py --mode live --capital 10000
 - **Long-only reality**: **1 config** >1%/wk with 5/5 (AdaptChan NEAR +1.15%/wk)
 - **Strong candidates** (4/5 folds, >1%/wk): VBM XRP +1.17%/wk, VBM DOGE +1.05%/wk
 - **Near-target** (4/5, ~1%/wk): RegimeMomV2 XRP +0.99%/wk, TSMOM ADA +0.94%/wk
+
+---
+
+## 3-Layer Regime Filter Test
+
+Tested a market-first trading system with 3 layers: BTC regime filter (master switch) → Relative Strength selection (top 3 assets) → Strategy execution. Hypothesis: filtering out RISK-OFF periods and weak assets should improve risk-adjusted returns.
+
+### BTC Regime Filter Stats
+- **RISK-ON**: 2,353/4,917 bars (47.9%)
+- **RISK-OFF**: 2,564 bars (52.1%)
+- Regime transitions: 451 (avg ~11 bars per regime = ~1.8 days)
+
+### Results: Regime Filter HURT Returns
+
+| Config | Raw WF | + BTC Regime | + Regime + RS | Δ from Raw | Folds (full) |
+|--------|--------|-------------|---------------|------------|------|
+| VolBreakoutMom DOGE | +1.05%/wk | +1.00%/wk | +0.57%/wk | -0.48% | 4/5 |
+| TSMOM ADA | +0.94%/wk | +0.68%/wk | +0.42%/wk | -0.52% | 3/5 |
+| VBM XRP | +1.17%/wk | +0.71%/wk | **+0.42%/wk** | -0.75% | **5/5** |
+| MultiEdge XRP | +0.81%/wk | +0.70%/wk | +0.35%/wk | -0.46% | 2/5 |
+| **AdaptChan NEAR** | **+1.15%/wk** | +0.74%/wk | +0.30%/wk | -0.85% | 4/5 |
+| AdaptChan SOL | +0.70%/wk | +0.63%/wk | +0.26%/wk | -0.44% | 4/5 |
+| CrossPair BTC | +0.37%/wk | +0.26%/wk | +0.26%/wk | -0.11% | 4/5 |
+| TSMOM SOL | +0.73%/wk | **+0.78%/wk** | +0.03%/wk | -0.69% | 3/5 |
+
+**Regime filter improved only 2/15 configs. Full 3-layer system improved only 1/15.**
+
+### What the Regime Filter DID Improve
+- **Drawdowns**: Average DD dropped from 27.9% → 22.8%
+- **Trade count**: Average trades 104 → 42 (60% fewer trades)
+- **CrossPair AVAX** (losing strategy): -0.17%/wk → -0.04%/wk (damage reduction)
+- **TSMOM SOL**: Only config where BTC regime alone improved WF avg (+0.73% → +0.78%)
+
+### Why the Regime Filter Failed to Boost Returns
+1. **The strategies already have their own regime detection.** AdaptChan adjusts channels by volatility percentile. RegimeMomV2 switches between trend/range/volatile modes. Adding an external filter is redundant — it just blocks valid signals.
+2. **Crypto altcoin trends don't always follow BTC.** NEAR had its strongest moves during periods BTC was flat/consolidating. The BTC regime filter blocked exactly those high-return entries.
+3. **The RS filter was too restrictive.** NEAR (our best asset) is only in top-3 RS 16% of the time. It tends to outperform *after* dropping out of the top rankings, during recovery moves.
+4. **451 transitions = too noisy.** Averaging ~1.8 days per regime means constant flipping, blocking entries mid-trend.
+
+### Verdict on 3-Layer Architecture
+The **concept is sound** but the **implementation needs work**:
+- The BTC regime filter alone (no RS) preserved 5/5 fold consistency for AdaptChan NEAR — just at lower returns (+0.74%/wk vs +1.15%/wk). It reduces risk but also caps upside.
+- The RS layer is counterproductive for pre-selected asset-strategy pairs. It may work better for *dynamic* asset selection (choose which asset to trade today) rather than *filtering* a fixed pairing.
+- A **wider regime window** (less sensitive, longer lookback) would reduce whipsaws and preserve more of the edge.
+- Better approach: use the regime filter **only as a kill switch during extreme risk-off** (all 4 conditions bearish), not as a general gatekeeper.

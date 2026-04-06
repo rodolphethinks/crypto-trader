@@ -1,0 +1,59 @@
+{
+  "strategy": "AdaptChan",
+  "symbol": "SOLUSDC",
+  "mode": "regime_filtered_longonly",
+  "raw_wf_avg": 0.7023,
+  "regime_wf_avg": 0.631,
+  "full_wf_avg": 0.258,
+  "full_wf_folds": 4,
+  "full_dd": 11.6,
+  "full_sharpe": 0.9079,
+  "risk_on_pct": 19.9,
+  "folds": [
+    {
+      "fold": 1,
+      "return_pct": 6.3608,
+      "weekly_pct": 0.2718,
+      "n_trades": 8,
+      "win_rate": 37.5,
+      "max_dd": 9.39,
+      "risk_on_pct": 25.3
+    },
+    {
+      "fold": 2,
+      "return_pct": 5.7677,
+      "weekly_pct": 0.2464,
+      "n_trades": 7,
+      "win_rate": 42.86,
+      "max_dd": 8.61,
+      "risk_on_pct": 23.1
+    },
+    {
+      "fold": 3,
+      "return_pct": 19.1337,
+      "weekly_pct": 0.8175,
+      "n_trades": 5,
+      "win_rate": 60.0,
+      "max_dd": 10.4,
+      "risk_on_pct": 17.2
+    },
+    {
+      "fold": 4,
+      "return_pct": -5.1501,
+      "weekly_pct": -0.22,
+      "n_trades": 5,
+      "win_rate": 20.0,
+      "max_dd": 11.6,
+      "risk_on_pct": 16.9
+    },
+    {
+      "fold": 5,
+      "return_pct": 4.075,
+      "weekly_pct": 0.1741,
+      "n_trades": 1,
+      "win_rate": 100.0,
+      "max_dd": 0.35,
+      "risk_on_pct": 17.0
+    }
+  ]
+}
