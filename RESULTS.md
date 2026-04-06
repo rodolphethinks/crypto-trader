@@ -9,9 +9,12 @@
 
 ---
 
-## Walk-Forward Validated Strategies (10 Configs, ALL 5/5 Folds Positive)
+## Walk-Forward Validated Strategies (Original Long/Short Backtests)
 
-### V6 Strategies (6 configs)
+> **WARNING**: These results used backtests that allowed **short selling**. MEXC spot is **long-only**.
+> See "Long-Only Reality Check" below for re-tested results.
+
+### V6 Strategies (6 configs — original long/short)
 
 | # | Strategy | Pair | OOS Avg/wk | Full 2yr Return | Max DD | Sharpe |
 |---|----------|------|-----------|-----------------|--------|--------|
@@ -22,7 +25,7 @@
 | 5 | CrossPairLeader | AVAXUSDC | +1.04%/wk | +126% | 22.1% | 1.10 |
 | 6 | CrossPairLeader | BTCUSDC | +1.01%/wk | +143% | 22.8% | 1.15 |
 
-### V7 Strategies (4 configs)
+### V7 Strategies (4 configs — original long/short)
 
 | # | Strategy | Pair | OOS Avg/wk | Full 2yr Return | Max DD | Sharpe |
 |---|----------|------|-----------|-----------------|--------|--------|
@@ -30,6 +33,58 @@
 | 8 | AdaptiveChannel | SOLUSDC | +1.54%/wk | +236% | 28.5% | 1.61 |
 | 9 | VolatilityCapture | AVAXUSDC | +1.53%/wk | +281% | **6.9%** | **1.99** |
 | 10 | VolatilityCapture | NEARUSDC | +1.02%/wk | +128% | 29.9% | 1.15 |
+
+---
+
+## Long-Only Reality Check (MEXC Spot Constraint)
+
+All 10 V6/V7 configs re-tested with **strictly long-only** backtests (BUY to open, SELL to close only).
+Also includes fine-tuned V8 strategies (TSMOM: 375 combos, VolBreakoutMom: 540 combos).
+
+### V6/V7 Re-Test (long-only)
+
+| # | Strategy | Pair | Long-Only WF Avg/wk | Folds | Long-Only Full | Avg DD | Status |
+|---|----------|------|-----------|-------|---------------|--------|--------|
+| 1 | **AdaptiveChannel** | **NEARUSDC** | **+1.15%/wk** | **5/5** | +1.58%/wk | 13.9% | **PRODUCTION-READY** |
+| 2 | AdaptiveChannel | SOLUSDC | +0.70%/wk | 5/5 | +0.86%/wk | 11.1% | Valid (below target) |
+| 3 | RegimeMomentumV2 | XRPUSDC | +0.99%/wk | 3/5 | +0.94%/wk | 13.9% | Close but inconsistent |
+| 4 | VolatilityCapture | AVAXUSDC | +0.84%/wk | 4/5 | +1.24%/wk | 10.3% | Promising |
+| 5 | MultiEdgeComposite | XRPUSDC | +0.81%/wk | 3/5 | +1.26%/wk | 16.5% | Inconsistent OOS |
+| 6 | MultiEdgeComposite | DOGEUSDC | +0.47%/wk | 3/5 | +0.46%/wk | 24.6% | Degraded |
+| 7 | CrossPairLeader | BTCUSDC | +0.37%/wk | 4/5 | +0.46%/wk | 14.4% | Moderate |
+| 8 | MomentumAccelerator | AVAXUSDC | +0.03%/wk | 1/5 | +0.05%/wk | 22.8% | **FAILED** |
+| 9 | VolatilityCapture | NEARUSDC | +0.36%/wk | 3/5 | +0.50%/wk | 12.1% | Degraded |
+| 10 | CrossPairLeader | AVAXUSDC | -0.17%/wk | 2/5 | -0.17%/wk | 24.7% | **FAILED** |
+
+**Key finding: Only 2/10 survive 5/5 long-only. Only 1/10 exceeds 1%/wk.**
+
+Short selling accounted for 40-100% of original profits on most strategies.
+
+### V8 Fine-Tuned Results (long-only)
+
+| # | Strategy | Pair | Sweep Best | WF Avg/wk | Folds | Avg DD |
+|---|----------|------|-----------|-----------|-------|--------|
+| 1 | VolBreakoutMom | XRPUSDC | +1.77%/wk | **+1.17%/wk** | 4/5 | 14.4% |
+| 2 | VolBreakoutMom | DOGEUSDC | +2.17%/wk | +1.05%/wk | 3/5 | 20.0% |
+| 3 | TSMOM | ADAUSDC | +1.15%/wk | +0.94%/wk | 4/5 | 15.5% |
+| 4 | VolBreakoutMom | ADAUSDC | +1.15%/wk | +0.73%/wk | 3/5 | 10.3% |
+| 5 | TSMOM | SOLUSDC | +1.05%/wk | +0.73%/wk | 4/5 | 19.4% |
+
+None achieved 5/5, but VBM XRP (+1.17%/wk, 4/5) and VBM DOGE (+1.05%/wk, 3/5) show strong OOS returns.
+
+### Combined Long-Only Ranking (all versions)
+
+| Rank | Strategy | Pair | WF Avg/wk | Folds | Avg DD | Source |
+|------|----------|------|-----------|-------|--------|--------|
+| 1 | **AdaptiveChannel** | **NEARUSDC** | **+1.15%/wk** | **5/5** | **13.9%** | **V7** |
+| 2 | VolBreakoutMom | XRPUSDC | +1.17%/wk | 4/5 | 14.4% | V8 |
+| 3 | VolBreakoutMom | DOGEUSDC | +1.05%/wk | 3/5 | 20.0% | V8 |
+| 4 | RegimeMomentumV2 | XRPUSDC | +0.99%/wk | 3/5 | 13.9% | V6 |
+| 5 | TSMOM | ADAUSDC | +0.94%/wk | 4/5 | 15.5% | V8 |
+| 6 | VolatilityCapture | AVAXUSDC | +0.84%/wk | 4/5 | 10.3% | V7 |
+| 7 | MultiEdgeComposite | XRPUSDC | +0.81%/wk | 3/5 | 16.5% | V6 |
+| 8 | TSMOM | SOLUSDC | +0.73%/wk | 4/5 | 19.4% | V8 |
+| 9 | AdaptiveChannel | SOLUSDC | +0.70%/wk | 5/5 | 11.1% | V7 |
 
 ### V8 Research Strategies (partial validation — long-only constraint)
 
@@ -44,7 +99,8 @@ Backtested long-only on MEXC spot (no shorting). 220 sweep combos, 5-fold walk-f
 | 4 | VolBreakoutMom | XRPUSDC | +0.48%/wk | 3/5 | +90.6% | 16.0% | 0.98 |
 | 5 | TSMOM | NEARUSDC | +0.19%/wk | 3/5 | +80.2% | 30.4% | 0.81 |
 
-**None achieved 5/5 folds positive or 1%/wk.** Best: TSMOM SOL at +0.80%/wk (4/5 folds).
+**Initial V8 sweep**: None achieved 5/5 or 1%/wk. Best: TSMOM SOL at +0.80%/wk (4/5 folds).
+**After fine-tuning** (915 additional combos): VBM XRP reached +1.17%/wk (4/5), VBM DOGE +1.05%/wk (3/5).
 
 #### V8 Strategies That Failed
 - **MeanRevLowVol** — Uniformly negative. Long-only can't short overbought conditions.
@@ -77,10 +133,16 @@ Research docs heavily recommended funding-rate arbitrage (cited in ALL 4 docs) a
 5. **VolatilityCapture** — Bollinger/Keltner squeeze breakout (best risk-adjusted: 6.9% DD)
 6. **CrossPairLeader** — BTC leads altcoin lag detection
 
-### Best Risk-Adjusted Configs
-1. **VolCapture AVAX**: 1.53%/wk, **6.9% max DD**, Sharpe 1.99
-2. **RegimeMomV2 XRP**: 1.32%/wk, 18.9% max DD, Sharpe 1.58
-3. **MomAccel AVAX**: 1.81%/wk (highest return), 22.2% max DD, Sharpe 1.53
+### Best Risk-Adjusted Configs (Long-Only Reality)
+1. **AdaptChan NEAR**: +1.15%/wk, 13.9% avg DD, **only 5/5 long-only validated config ≥1%/wk**
+2. **VolCapture AVAX**: +0.84%/wk, **10.3% avg DD** (best risk-adjusted, but 4/5)
+3. **AdaptChan SOL**: +0.70%/wk, **11.1% avg DD**, 5/5 folds (conservative choice)
+
+### Critical Insight: Short Selling Impact
+- Original V6/V7 backtests allowed shorts → **10/10 configs >1%/wk, all 5/5**
+- Long-only re-test → **1/10 configs >1%/wk with 5/5** (AdaptChan NEAR)
+- Short selling contributed 40-100% of returns for most strategies
+- **MomentumAccelerator AVAX**: +1.81%/wk (long/short) → +0.03%/wk (long-only) = 98% from shorts
 
 ---
 
@@ -94,7 +156,12 @@ Research docs heavily recommended funding-rate arbitrage (cited in ALL 4 docs) a
 - `strategies/v7_ml.py` — 3 DL strategies (LSTM, CNN, Transformer)
 - `strategies/v8_research.py` — 5 research-extracted strategies (VolBreakoutMom, MeanRevLowVol, WeekendGapFade, BTCResidualMR, TSMOM)
 - `scripts/run_v8_pipeline.py` — Automated research-to-backtest pipeline
+- `scripts/run_longonly_retest.py` — Long-only re-test + fine sweep pipeline
 - `results/` — V8 per-strategy JSONs, trade CSVs, sweep & walk-forward CSVs
+- `results/v6v7_longonly_retest.csv` — V6/V7 long-only re-test results
+- `results/tsmom_fine_sweep.csv` — Fine TSMOM parameter sweep (375 combos)
+- `results/vbm_fine_sweep.csv` — Fine VolBreakoutMom sweep (540 combos)
+- `results/all_longonly_validated.csv` — Combined long-only ranking
 
 ### How to Run
 ```bash
@@ -132,8 +199,10 @@ python scripts/run_production.py --mode live --capital 10000
 | V5 | DL + Sentiment (files lost) | Walk-forward | Moderate |
 | **V6** | **Aggressive (7 new strategies)** | **Wide 4h sweep + 5-fold WF** | **6/7 pass, +1.0-1.8%/wk** |
 | **V7** | **Diverse (6) + ML (3)** | **Wide 4h + 5-fold WF** | **4/8 pass, +1.0-1.7%/wk** |
-| **V8** | **Research-extracted (5 from LLM docs)** | **220 sweep + 5-fold WF (long-only)** | **0/5 pass 5/5, best 4/5 at +0.80%/wk** |
+| **V8** | **Research-extracted (5 from LLM docs)** | **220 + 915 sweep + WF (long-only)** | **0/5 pass 5/5; VBM XRP 4/5 +1.17%/wk** |
 
-**Total validated configs exceeding 1%/week: 10** (all with ALL 5/5 folds positive)
-
-**V8 note**: Long-only constraint significantly limits research strategies. TSMOM SOL (+0.80%/wk, 4/5 folds) is closest candidate — needs further tuning or short-selling access to reach 1%/wk threshold.
+### Long-Only Bottom Line
+- **Original claim (long/short)**: 10 configs >1%/wk, all 5/5 positive
+- **Long-only reality**: **1 config** >1%/wk with 5/5 (AdaptChan NEAR +1.15%/wk)
+- **Strong candidates** (4/5 folds, >1%/wk): VBM XRP +1.17%/wk, VBM DOGE +1.05%/wk
+- **Near-target** (4/5, ~1%/wk): RegimeMomV2 XRP +0.99%/wk, TSMOM ADA +0.94%/wk

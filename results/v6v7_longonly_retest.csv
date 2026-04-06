@@ -1,0 +1,11 @@
+strategy,symbol,full_return_pct,full_weekly_pct,full_max_dd_pct,full_sharpe,full_pf,full_trades,full_wr,wf_positive_folds,wf_all_positive,wf_avg_weekly_pct,wf_avg_dd_pct
+AdaptiveChannel,NEARUSDC,184.5959,1.5768,20.51,1.4327,1.7225,61,45.9,5,True,1.1517,13.92
+RegimeMomentumV2,XRPUSDC,109.5702,0.9359,23.9,1.1119,1.5298,60,45.0,3,False,0.9912,13.88
+VolatilityCapture,AVAXUSDC,144.6972,1.236,15.04,1.6901,3.0343,22,59.09,4,False,0.8368,10.32
+MultiEdgeComposite,XRPUSDC,147.3704,1.2588,31.46,1.107,1.2694,115,41.74,3,False,0.8137,16.49
+AdaptiveChannel,SOLUSDC,100.8102,0.8611,22.84,1.222,1.4669,76,40.79,5,True,0.7023,11.14
+MultiEdgeComposite,DOGEUSDC,53.8228,0.4597,38.61,0.6151,1.1121,112,39.29,3,False,0.4689,24.59
+CrossPairLeader,BTCUSDC,53.5366,0.4573,20.94,0.8649,1.1869,149,43.62,4,False,0.3659,14.44
+VolatilityCapture,NEARUSDC,58.0694,0.496,27.85,0.9051,1.6564,28,42.86,3,False,0.3584,12.13
+MomentumAccelerator,AVAXUSDC,5.551,0.0474,38.28,0.2372,1.0209,81,37.04,1,False,0.0333,22.76
+CrossPairLeader,AVAXUSDC,-19.9953,-0.1708,37.72,-0.0488,0.9276,134,41.79,2,False,-0.1669,24.71
